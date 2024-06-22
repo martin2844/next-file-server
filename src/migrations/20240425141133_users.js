@@ -3,14 +3,15 @@
  * @returns { Promise<void> }
  */
 exports.up = function (knex) {
-  knex.schema
-    .createTable("users", (table) => {
-      table.string("id").primary();
-      table.string("name").notNullable();
-      table.string("email").notNullable();
-      table.string("image");
-    })
-    .then(() => console.log("Migration done"));
+  return knex.schema.createTable("uploads", (table) => {
+    table.increments("id").primary();
+    table.string("file_name").notNullable();
+    table.string("file_type").notNullable();
+    table.string("file_extension").notNullable();
+    table.string("file_url").notNullable();
+    table.boolean("is_private").defaultTo(false);
+    table.timestamps(true, true);
+  });
 };
 
 /**
@@ -18,5 +19,5 @@ exports.up = function (knex) {
  * @returns { Promise<void> }
  */
 exports.down = function (knex) {
-  knex.schema.dropTable("users").then(() => console.log("Rollback done"));
+  return knex.schema.dropTable("uploads");
 };
