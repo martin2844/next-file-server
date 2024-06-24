@@ -3,13 +3,13 @@
  * @returns { Promise<void> }
  */
 exports.up = function (knex) {
-  return knex.schema.createTable("uploads", (table) => {
-    table.increments("id").primary();
-    table.string("file_name").notNullable();
-    table.string("file_type").notNullable();
-    table.string("file_extension").notNullable();
-    table.string("file_url").notNullable();
-    table.boolean("is_private").defaultTo(false);
+  return knex.schema.createTable('uploads', (table) => {
+    table.increments('id').primary();
+    table.string('file_name').notNullable();
+    table.string('file_type').notNullable();
+    table.string('file_extension').notNullable();
+    table.string('file_url').notNullable();
+    table.boolean('is_private').defaultTo(false);
     table.timestamps(true, true);
   });
 };
@@ -19,5 +19,5 @@ exports.up = function (knex) {
  * @returns { Promise<void> }
  */
 exports.down = function (knex) {
-  return knex.schema.dropTable("uploads");
+  return knex.schema.dropTable('uploads');
 };

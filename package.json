@@ -9,6 +9,7 @@
     "migrate:make": "knex migrate:make",
     "migrate:latest": "knex migrate:latest",
     "migrate:rollback": "knex migrate:rollback",
+    "format": "prettier --write .",
     "lint": "next lint"
   },
   "dependencies": {
@@ -19,9 +20,12 @@
     "axios": "^1.7.2",
     "better-sqlite3": "^9.5.0",
     "framer-motion": "^11.2.11",
+    "jsonwebtoken": "^9.0.2",
     "knex": "^3.1.0",
+    "lodash.debounce": "^4.0.8",
     "next": "14.2.2",
     "next-auth": "^4.24.7",
+    "prettier": "^3.3.2",
     "react": "^18",
     "react-dom": "^18"
   },
@@ -34,6 +38,7 @@
     "better-sqlite3": false
   },
   "devDependencies": {
+    "@types/jsonwebtoken": "^9.0.6",
     "@types/node": "^20",
     "@types/react": "^18",
     "@types/react-dom": "^18",

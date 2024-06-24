@@ -1,5 +1,5 @@
-import CredentialsProvider from "next-auth/providers/credentials";
-import { login } from "@/services/auth";
+import CredentialsProvider from 'next-auth/providers/credentials';
+import { login } from '@/services/auth';
 
 export const authOptions = {
   // Configure one or more authentication providers
@@ -7,13 +7,13 @@ export const authOptions = {
     // ...add more providers here
     CredentialsProvider({
       // The name to display on the sign in form (e.g. 'Sign in with...')
-      name: "Credentials",
+      name: 'Credentials',
       // The credentials is used to generate a suitable form on the sign in page.
       // You can specify whatever fields you are expecting to be submitted.
       // e.g. domain, username, password, 2FA token, etc.
       // You can pass any HTML attribute to the <input> tag through the object.
       credentials: {
-        password: { label: "Password", type: "password" },
+        password: { label: 'Password', type: 'password' },
       },
       async authorize(credentials) {
         // You need to provide your own logic here that takes the credentials
@@ -25,11 +25,9 @@ export const authOptions = {
         try {
           const response = await login(credentials?.password as string);
           if (response.status === 200) {
-            console.log(response.data);
-            return { id: "1", name: "super user", token: response.data };
+            return { id: '1', name: 'super user', token: response.data.token };
           }
         } catch (error) {
-          console.log(error);
           return null;
         }
         // Return null if user data could not be retrieved

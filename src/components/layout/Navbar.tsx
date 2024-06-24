@@ -1,11 +1,11 @@
-"use client";
+'use client';
 import {
   Navbar as NextuiNavbar,
   NavbarBrand,
   Link,
   NavbarContent,
   NavbarItem,
-} from "@nextui-org/react";
+} from '@nextui-org/react';
 
 export default function Navbar({ loggedin }: { loggedin: boolean }) {
   return (

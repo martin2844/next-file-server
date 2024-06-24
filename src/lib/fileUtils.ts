@@ -1,10 +1,10 @@
-import fs from "fs";
-import path from "path";
+import fs from 'fs';
+import path from 'path';
 
-const uploadsFolderPath = process.env.UPLOADS_FOLDER || "uploads";
+const uploadsFolderPath = process.env.UPLOADS_FOLDER || 'uploads';
 
 const checkFolder = (folderPath: string): boolean => {
-  if (!folderPath) throw Error("folder path is required");
+  if (!folderPath) throw Error('folder path is required');
   return fs.existsSync(folderPath);
 };
 
@@ -16,7 +16,7 @@ export const createUploadFolder = (): string => {
 };
 
 const fileExists = (filePath: string): boolean => {
-  if (!filePath) throw Error("file path is required");
+  if (!filePath) throw Error('file path is required');
   return fs.existsSync(filePath);
 };
 
