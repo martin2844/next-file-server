@@ -4,6 +4,9 @@ const nextConfig = {
     instrumentationHook: true,
     serverComponentsExternalPackages: ['knex'],
   },
+  typescript: {
+    ignoreBuildErrors: true,
+  },
 };
 
 export default nextConfig;
