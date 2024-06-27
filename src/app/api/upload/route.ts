@@ -12,6 +12,8 @@ import { apiResponse } from '@/utils/apiResponse';
 import { checkSession } from '@/utils/auth';
 
 export async function POST(req: NextRequest) {
+  const userUpload = req.headers.get('user-upload');
+  console.log('User upload header: ', userUpload);
   const allowed = await checkSession(req);
   if (!allowed) {
     return apiResponse(401, { message: 'Unauthorized' });

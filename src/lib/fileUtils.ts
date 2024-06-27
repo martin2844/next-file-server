@@ -2,15 +2,18 @@ import fs from 'fs';
 import path from 'path';
 
 const uploadsFolderPath = process.env.UPLOADS_FOLDER || 'uploads';
+const userUploadFolder = process.env.USER_UPLOADS_FOLDER || 'user-uploads';
 
 const checkFolder = (folderPath: string): boolean => {
   if (!folderPath) throw Error('folder path is required');
   return fs.existsSync(folderPath);
 };
 
-export const createUploadFolder = (): string => {
-  if (!checkFolder(uploadsFolderPath)) {
-    fs.mkdirSync(uploadsFolderPath, { recursive: true });
+export const createUploadFolder = (user = false): string => {
+  if (!checkFolder(user ? userUploadFolder : uploadsFolderPath)) {
+    fs.mkdirSync(user ? userUploadFolder : uploadsFolderPath, {
+      recursive: true,
+    });
   }
   return uploadsFolderPath;
 };
