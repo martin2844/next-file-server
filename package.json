@@ -1,10 +1,10 @@
 {
-  "name": "knext",
+  "name": "next-file-server",
   "version": "0.1.0",
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "next build",
+    "build": "NODE_OPTIONS='--max_old_space_size=1024' next build",
     "start": "next start",
     "migrate:make": "knex migrate:make",
     "migrate:latest": "knex migrate:latest",
