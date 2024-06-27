@@ -16,7 +16,7 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v2
         with:
-          node-version: '18.14.0'
+          node-version: '18.17.0'
 
       - name: Install npm
         run: npm install -g npm@7
