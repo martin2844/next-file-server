@@ -42,7 +42,7 @@ jobs:
             npm install 
             npm run build
             cp .env ./dist
-            echo "NEXTAUTH_URL=http://localhost:3000" > ./dist/.env
+            echo "NEXTAUTH_URL=${{ secrets.NEXTAUTH_URL }}" > ./dist/.env
             echo "NEXT_AUTH_SECRET=${{ secrets.NEXT_AUTH_SECRET }}" >> ./dist/.env
             echo "JWT_PASSWORD=${{ secrets.JWT_PASSWORD }}" >> ./dist/.env
             pm2 restart file
