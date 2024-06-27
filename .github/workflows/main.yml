@@ -41,8 +41,9 @@ jobs:
             git pull origin master
             npm install 
             npm run build
-            cp .env ./dist
-            echo "NEXTAUTH_URL=${{ secrets.NEXTAUTH_URL }}" > ./dist/.env
-            echo "NEXT_AUTH_SECRET=${{ secrets.NEXT_AUTH_SECRET }}" >> ./dist/.env
-            echo "JWT_PASSWORD=${{ secrets.JWT_PASSWORD }}" >> ./dist/.env
+            rm .env
+            touch .env
+            echo "NEXTAUTH_URL=${{ secrets.NEXTAUTH_URL }}" > .env
+            echo "NEXT_AUTH_SECRET=${{ secrets.NEXT_AUTH_SECRET }}" >> .env
+            echo "JWT_PASSWORD=${{ secrets.JWT_PASSWORD }}" >> .env
             pm2 restart file
