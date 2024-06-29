@@ -46,5 +46,5 @@ jobs:
             echo "NEXTAUTH_URL=${{ secrets.NEXTAUTH_URL }}" > .env
             echo "NEXT_AUTH_SECRET=${{ secrets.NEXT_AUTH_SECRET }}" >> .env
             echo "JWT_PASSWORD=${{ secrets.JWT_PASSWORD }}" >> .env
-            echo "NEXT_PUBLIC_URL"=${{ secrets.NEXTAUTH_URL }}" >> .env
+            echo "NEXT_PUBLIC_URL=${{ secrets.NEXTAUTH_URL }}" >> .env
             pm2 restart file
