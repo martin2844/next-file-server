@@ -30,7 +30,7 @@ export default async function RootLayout({
           <Navbar loggedin={!!session?.user?.name} />
           <main
             style={{ minHeight: '100%' }}
-            className="flex flex-col w-full h-full items-center justify-center"
+            className="flex flex-col w-full h-full items-center justify-center pb-8"
           >
             {children}
           </main>

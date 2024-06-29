@@ -6,21 +6,38 @@ import {
 } from '@/lib/fileUtils';
 import path from 'path';
 import { writeFile } from 'fs/promises';
-import { UploadedFile } from '@/types/file';
+import { UploadedFile, UserFile } from '@/types/file';
+import { getBlankFile, updateUserFile } from '@/services/server/user_files';
 import { saveFile } from '@/services/server/files';
 import { apiResponse } from '@/utils/apiResponse';
 import { checkSession } from '@/utils/auth';
 
 export async function POST(req: NextRequest) {
-  const userUpload = req.headers.get('user-upload');
-  console.log('User upload header: ', userUpload);
-  const allowed = await checkSession(req);
-  if (!allowed) {
-    return apiResponse(401, { message: 'Unauthorized' });
-  }
   const formData = await req.formData();
   const file = formData.get('file');
   const isPrivateField = formData.get('is_private');
+  const userUploadId = formData.get('user_upload_id');
+  const user_name = formData.get('user_name');
+  // Extract the IP address from the request
+  const forwardedFor = req.headers.get('x-forwarded-for');
+  const ipAddress = forwardedFor
+    ? forwardedFor.split(',')[0]
+    : req.headers.get('x-real-ip') || req.headers.get('host');
+
+  const allowed = await checkSession(req);
+
+  if (!allowed && !userUploadId) {
+    return apiResponse(401, { message: 'Unauthorized' });
+  }
+
+  if (userUploadId) {
+    const file = await getBlankFile(userUploadId as string);
+    if (!file) {
+      return apiResponse(404, {
+        message: 'User upload not found or incorrectly setup',
+      });
+    }
+  }
 
   if (!file) {
     return apiResponse(400, { error: 'No files received.' });
@@ -33,7 +50,10 @@ export async function POST(req: NextRequest) {
   const isPrivate = isPrivateField ? isPrivateField === 'true' : false;
   try {
     const uploadsPath = createUploadFolder();
-    let filePath = path.join(uploadsPath, filename);
+    const finalPath = userUploadId
+      ? path.join(uploadsPath, '/user')
+      : uploadsPath;
+    let filePath = path.join(finalPath, filename);
     filePath = getUniqueFilename(filePath);
     await writeFile(filePath, buffer);
     // Construct the UploadedFile data
@@ -45,6 +65,21 @@ export async function POST(req: NextRequest) {
       is_private: isPrivate, // set based on your application logic
       file_size: buffer.byteLength,
     };
+    if (userUploadId) {
+      const id = userUploadId.toString();
+      const userFile: UserFile = {
+        ...uploadedFile,
+        id,
+        user_name: user_name?.toString() || 'Unknown',
+        user_ip: ipAddress || 'Unknown',
+        user_agent: req.headers.get('user-agent') || 'Unknown',
+      };
+      const updatedUserFile = updateUserFile(userFile);
+      return apiResponse(200, {
+        message: 'File uploaded successfully.',
+        file: updatedUserFile,
+      });
+    }
     const savedFile = await saveFile(uploadedFile);
     return apiResponse(200, {
       message: 'File uploaded successfully.',

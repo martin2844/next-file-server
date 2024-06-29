@@ -11,16 +11,24 @@ import {
   useDisclosure,
 } from '@nextui-org/react';
 import { UploadedFile } from '@/types/file';
+import { useRouter } from 'next/navigation';
 
 const UploadModal = ({
   addFile,
+  userFileId,
+  redirect,
+  noPrivate,
 }: {
-  addFile: (file: UploadedFile) => void;
+  addFile?: (file: UploadedFile) => void;
+  userFileId?: string;
+  redirect?: boolean;
+  noPrivate?: boolean;
 }) => {
   const { isOpen, onOpen, onOpenChange, onClose } = useDisclosure();
   const [file, setFile] = useState<File | null>(null);
   const [isPrivate, setIsPrivate] = useState(false);
   const [loading, setLoading] = useState(false);
+  const router = useRouter();
 
   // Handler for file selection
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -46,6 +54,9 @@ const UploadModal = ({
     const formData = new FormData();
     formData.append('file', file);
     formData.append('is_private', isPrivate.toString());
+    if (userFileId) {
+      formData.append('user_upload_id', userFileId);
+    }
 
     try {
       const response = await fetch('/api/upload', {
@@ -55,10 +66,15 @@ const UploadModal = ({
 
       if (response.ok) {
         const { file } = await response.json();
-        addFile(file);
+        if (addFile) {
+          addFile(file);
+        }
         onClose();
         setFile(null);
         setIsPrivate(false);
+        if (redirect) {
+          router.push('/done');
+        }
       } else {
         alert('Failed to upload file.');
       }
@@ -94,12 +110,14 @@ const UploadModal = ({
                       onChange={handleFileChange}
                       className="border border-gray-300 p-2 w-full rounded-md mb-4"
                     />
-                    <Checkbox
-                      checked={isPrivate}
-                      onChange={handleCheckboxChange}
-                    >
-                      Private
-                    </Checkbox>
+                    {!noPrivate && (
+                      <Checkbox
+                        checked={isPrivate}
+                        onChange={handleCheckboxChange}
+                      >
+                        Private
+                      </Checkbox>
+                    )}
                   </div>
                   <Button isLoading={loading} type="submit">
                     Upload File

@@ -2,6 +2,7 @@
 import { useState } from 'react';
 import { createBlankFile } from '@/services/client/user_files';
 import { Button } from '@nextui-org/react';
+import { Snippet } from '@nextui-org/react';
 const Create = () => {
   const [links, setLinks] = useState<string[]>([]);
   const [loading, setLoading] = useState(false);
@@ -27,10 +28,12 @@ const Create = () => {
           Create Link
         </Button>
         {links.length > 0 && (
-          <div>
+          <div className="mt-8">
             {links.map((link) => (
-              <div key={link}>
-                <p>{`${process.env.NEXT_PUBLIC_URL}/upload/${link}`}</p>
+              <div key={link} className="mt-2">
+                <Snippet symbol="">
+                  {`${process.env.NEXT_PUBLIC_URL}/upload/${link}`}
+                </Snippet>
               </div>
             ))}
           </div>
