@@ -5,6 +5,7 @@ import { UploadedFile } from '@/types/file';
 import { updateFile } from '@/services/client/file';
 import FileTable from '../FileTable/FileTable';
 import UploadModal from '../UploadModal/UploadModal';
+import { Switch } from '@nextui-org/react';
 
 const FileSection = ({
   loggedin,
@@ -14,6 +15,7 @@ const FileSection = ({
   ssrFiles: UploadedFile[];
 }) => {
   const [files, setFiles] = useState<UploadedFile[]>(ssrFiles);
+  const [deleteEnabled, setDeleteEnabled] = useState(false);
   const addFile = (file: UploadedFile) => {
     setFiles([...files, file]);
   };
@@ -47,10 +49,23 @@ const FileSection = ({
 
   return (
     <>
+      {loggedin && (
+        <div className="flex flex-row justify-end items-center mb-4">
+          <div className="mr-4 font-bold">Enable Delete</div>
+          <Switch
+            size="sm"
+            defaultSelected={deleteEnabled}
+            isSelected={deleteEnabled}
+            onChange={() => setDeleteEnabled(!deleteEnabled)}
+          />
+        </div>
+      )}
       <FileTable
         loggedin={loggedin}
         files={files}
         markFilePrivate={debouncedMarkFilePrivate}
+        deleteEnabled={deleteEnabled}
+        setFiles={setFiles}
       />
       {loggedin && (
         <div className="mt-4 flex items-center w-full justify-center">

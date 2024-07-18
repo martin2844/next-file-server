@@ -1,4 +1,4 @@
-import { getFileById, updateFile } from '@/services/server/files';
+import { deleteFile, getFileById, updateFile } from '@/services/server/files';
 import { UploadedFile } from '@/types/file';
 import { apiResponse } from '@/utils/apiResponse';
 import { getSession } from '@/utils/session';
@@ -98,6 +98,33 @@ export async function PUT(
   } catch (error) {
     return apiResponse(500, {
       message: 'Error updating file',
+      error: error?.toString(),
+    });
+  }
+}
+
+export async function DELETE(
+  req: NextRequest,
+  { params }: { params: { id: string } },
+) {
+  const session = await getSession();
+  if (!session?.user) {
+    return apiResponse(401, { message: 'Unauthorized' });
+  }
+  const id = params.id;
+  const file = await getFileById(parseInt(id));
+  if (!file) {
+    apiResponse(404, { message: 'File not found' });
+  }
+  try {
+    await fsPromises.unlink(
+      path.resolve('.', (file as unknown as UploadedFile).file_url),
+    );
+    await deleteFile(parseInt(id));
+    return apiResponse(200, { message: 'File deleted successfully' });
+  } catch (error) {
+    return apiResponse(500, {
+      message: 'Error deleting file',
       error: error?.toString(),
     });
   }

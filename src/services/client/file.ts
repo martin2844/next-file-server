@@ -7,4 +7,9 @@ const updateFile = async (id: number, file: Partial<UploadedFile>) => {
   return updateReq.data;
 };
 
-export { updateFile };
+const deleteFile = async (id: number) => {
+  const deleteReq = await axios.delete(`/api/file/${id}`);
+  return deleteReq.data;
+};
+
+export { updateFile, deleteFile };

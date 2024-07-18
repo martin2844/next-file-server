@@ -2,16 +2,25 @@ import { useState, useEffect } from 'react';
 
 const useIsMobile = (): boolean => {
   const mobileWidth = 800;
-  const [isMobile, setIsMobile] = useState(
-    window ? window?.innerWidth < mobileWidth : false,
-  );
+  const [isMobile, setIsMobile] = useState(false); // Set default state to false
+
   useEffect(() => {
+    // Define the function to update the state based on the window width
     const handleResize = () => {
-      setIsMobile(window?.innerWidth < mobileWidth);
+      setIsMobile(window.innerWidth < mobileWidth);
     };
-    window?.addEventListener('resize', handleResize);
+
+    // Check if window is available and set initial width
+    if (typeof window !== 'undefined') {
+      setIsMobile(window.innerWidth < mobileWidth);
+      window.addEventListener('resize', handleResize);
+    }
+
+    // Cleanup function to remove the event listener
     return () => {
-      window?.removeEventListener('resize', handleResize);
+      if (typeof window !== 'undefined') {
+        window.removeEventListener('resize', handleResize);
+      }
     };
   }, []);
 

@@ -20,3 +20,7 @@ export const getFileById = async (id: number) => {
 export const updateFile = async (id: number, file: Partial<UploadedFile>) => {
   return db('uploads').update(file).where({ id }).returning('*');
 };
+
+export const deleteFile = async (id: number) => {
+  return db('uploads').delete().where({ id });
+};
